@@ -12,8 +12,8 @@ port = '/dev/ttyACM1'
 usbacc = serial.Serial(port)
 
 # CHANGE RANGE TO +- 2
-RANGE = 2
-FREQ = 3.13
+RANGE = 4
+FREQ = 100
 g = 9.80665 # VALUE OF G IN METERS PER SECOND SQUARE
 
 def csv_to_2D_list(csv_list):
@@ -27,7 +27,7 @@ freq_write = 'FREQ ' + str(FREQ)
 usbacc.write(freq_write.encode())
 
 # READ N SAMPLES
-n_samples = 5
+n_samples = 50
 
 with open("/home/weihan08/Desktop/AccelerometerData/"+ dt_string + ".csv","a+") as csvfile:
 	sensorwriter = csv.writer(csvfile, delimiter=',') 
@@ -46,24 +46,24 @@ with open("/home/weihan08/Desktop/AccelerometerData/"+ dt_string + ".csv","a+") 
 			accz_avg = 0.0
 
 			for sample in acc:
-				print(sample)
-				accx_avg = accx_avg + sample[0]
-				accy_avg = accy_avg + sample[1]
-				accz_avg = accz_avg + sample[2]
+				# print(sample)
+				accx_avg += sample[0]
+				accy_avg += sample[1]
+				accz_avg += sample[2]
 
 			accx_avg = accx_avg / n_samples
 			accy_avg = accy_avg / n_samples
 			accz_avg = accz_avg / n_samples
 
 	# CALCULATE TOTAL AVERAGE ACCELERATION, remove constant gravity -9.13.
-			Total_acc = g * math.sqrt(accx_avg**2 + accy_avg**2 + accz_avg**2) * (RANGE / 511.5) - 9.13 #10-bit resolution, should divide by 1023, but since range is +/-, so *2/1023=1/511.5
-			print('\nTotal average acceleration is equal ' + str(Total_acc) + ' m/s^2')
+		#	Total_acc = g * math.sqrt(accx_avg**2 + accy_avg**2 + accz_avg**2) * (RANGE / 511.5) - 9.13 #10-bit resolution, should divide by 1023, but since range is +/-, so *2/1023=1/511.5
+			Total_acc = math.sqrt(accx_avg**2 + accy_avg**2 + accz_avg**2) * (RANGE / 511.5) - 0.928  #10-bit resolution, should divide by 1023, but since range is +/-, so *2/1023=1/511.5
+			print('\nTotal average acceleration is equal ' + str(Total_acc) + ' G forces')
 			now = datetime.now()
 			y=[str(now.strftime("%d-%m-%Y-%H:%M:%S")),str(Total_acc)]
 			sensorwriter.writerow(y)
 			csvfile.flush()
-			time.sleep(0.5)
-
+			
 	except KeyboardInterrupt:
 		usbacc.close() # CLOSE USB CONNECTION
 		print('Interrupted!')
