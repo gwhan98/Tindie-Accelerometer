@@ -13,7 +13,7 @@ usbacc = serial.Serial(port)
 
 # CHANGE RANGE TO +- 2
 RANGE = 4
-FREQ = 100
+FREQ = 50
 g = 9.80665 # VALUE OF G IN METERS PER SECOND SQUARE
 
 def csv_to_2D_list(csv_list):
@@ -56,8 +56,8 @@ with open("/home/weihan08/Desktop/AccelerometerData/"+ dt_string + ".csv","a+") 
 			accz_avg = accz_avg / n_samples
 
 	# CALCULATE TOTAL AVERAGE ACCELERATION, remove constant gravity -9.13.
-		#	Total_acc = g * math.sqrt(accx_avg**2 + accy_avg**2 + accz_avg**2) * (RANGE / 511.5) - 9.13 #10-bit resolution, should divide by 1023, but since range is +/-, so *2/1023=1/511.5
-			Total_acc = math.sqrt(accx_avg**2 + accy_avg**2 + accz_avg**2) * (RANGE / 511.5) - 0.928  #10-bit resolution, should divide by 1023, but since range is +/-, so *2/1023=1/511.5
+		#	Total_acc = g * math.sqrt(accx_avg**2 + accy_avg**2 + accz_avg**2) * (RANGE / 512) - 9.13 #10-bit resolution, should divide by 1024, but since range is +/-, so *2/1024=1/512
+			Total_acc = math.sqrt(accx_avg**2 + accy_avg**2 + accz_avg**2) * (RANGE / 512) - 0.928  #10-bit resolution, should divide by 1024, but since range is +/-, so *2/1024=1/512
 			print('\nTotal average acceleration is equal ' + str(Total_acc) + ' G forces')
 			now = datetime.now()
 			y=[str(now.strftime("%d-%m-%Y-%H:%M:%S")),str(Total_acc)]
