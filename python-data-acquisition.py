@@ -56,9 +56,9 @@ with open("/home/weihan08/Desktop/AccelerometerData/"+ dt_string + ".csv","a+") 
 			accz_avg = accz_avg / n_samples
 
 	# CALCULATE TOTAL AVERAGE ACCELERATION, remove constant gravity -9.13.
-		#	Total_acc = g * math.sqrt(accx_avg**2 + accy_avg**2 + accz_avg**2) * (RANGE / 512) - 9.13 #10-bit resolution, should divide by 1024, but since range is +/-, so *2/1024=1/512
-			Total_acc = math.sqrt(accx_avg**2 + accy_avg**2 + accz_avg**2) * (RANGE / 512) - 0.928  #10-bit resolution, should divide by 1024, but since range is +/-, so *2/1024=1/512
-			print('\nTotal average acceleration is equal ' + str(Total_acc) + ' G forces')
+			Total_acc = g * math.sqrt(accx_avg**2 + accy_avg**2 + accz_avg**2) * (RANGE / 512) - 9.13 #10-bit resolution, should divide by 1024, but since range is +/-, so *2/1024=1/512
+		#	Total_acc = math.sqrt(accx_avg**2 + accy_avg**2 + accz_avg**2) * (RANGE / 512) - 0.928  #10-bit resolution, should divide by 1024, but since range is +/-, so *2/1024=1/512
+			print('\nTotal average acceleration is equal to ' + str(Total_acc) + ' m/s^2')
 			now = datetime.now()
 			y=[str(now.strftime("%d-%m-%Y-%H:%M:%S")),str(Total_acc)]
 			sensorwriter.writerow(y)
